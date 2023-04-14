@@ -36,13 +36,19 @@ void stop(uint32_t waitTime)
  * @details
  *   
  ******************************************************************************/
-void turnCCW(CCW_spin_delay_Typedef degrees)
+void spinCCW(CCW_spin_delay_Typedef degrees)
 {
-    digitalWrite(DPIN_LEFT_BACKWARD, LOW);
-    digitalWrite(DPIN_LEFT_FORWARD, HIGH);
-    digitalWrite(DPIN_RIGHT_BACKWARD, HIGH);
-    digitalWrite(DPIN_RIGHT_FORWARD, LOW);
+    analogWrite(DPIN_RIGHT_PWM, FULL_SPEED_RIGHT);
+	analogWrite(DPIN_LEFT_PWM, FULL_SPEED_RIGHT);
+
+    digitalWrite(DPIN_LEFT_BACKWARD, HIGH);
+    digitalWrite(DPIN_LEFT_FORWARD, LOW);
+    digitalWrite(DPIN_RIGHT_BACKWARD, LOW);
+    digitalWrite(DPIN_RIGHT_FORWARD, HIGH);
     delay(degrees);
+
+    analogWrite(DPIN_RIGHT_PWM, IDEAL_SPEED_RIGHT);
+	analogWrite(DPIN_LEFT_PWM, IDEAL_SPEED_LEFT);
 }
 
 
@@ -53,13 +59,19 @@ void turnCCW(CCW_spin_delay_Typedef degrees)
  * @details
  *   
  ******************************************************************************/
-void turnCW(CW_spin_delay_Typedef degrees)
+void spinCW(CW_spin_delay_Typedef delayTime)
 {
-    digitalWrite(DPIN_LEFT_BACKWARD, HIGH);
-    digitalWrite(DPIN_LEFT_FORWARD, LOW);
-    digitalWrite(DPIN_RIGHT_BACKWARD, LOW);
-    digitalWrite(DPIN_RIGHT_FORWARD, HIGH);
-    delay(degrees);
+    analogWrite(DPIN_RIGHT_PWM, FULL_SPEED_RIGHT);
+	analogWrite(DPIN_LEFT_PWM, FULL_SPEED_LEFT);
+
+    digitalWrite(DPIN_LEFT_BACKWARD, LOW);
+    digitalWrite(DPIN_LEFT_FORWARD, HIGH);
+    digitalWrite(DPIN_RIGHT_BACKWARD, HIGH);
+    digitalWrite(DPIN_RIGHT_FORWARD, LOW);
+    delay(delayTime);
+
+    analogWrite(DPIN_RIGHT_PWM, IDEAL_SPEED_RIGHT);
+	analogWrite(DPIN_LEFT_PWM, IDEAL_SPEED_LEFT);
 }
 
 
@@ -89,10 +101,33 @@ void drive_backward(uint32_t driveTime)
  ******************************************************************************/
 void drive_forward(uint32_t driveTime)
 {
-    digitalWrite(DPIN_RIGHT_FORWARD, HIGH);
-    delay(250);
-    digitalWrite(DPIN_LEFT_FORWARD, HIGH);
     digitalWrite(DPIN_LEFT_BACKWARD, LOW);
     digitalWrite(DPIN_RIGHT_BACKWARD, LOW);
+    digitalWrite(DPIN_RIGHT_FORWARD, HIGH);
+    digitalWrite(DPIN_LEFT_FORWARD, HIGH);
     delay(driveTime);
+}
+
+void outAndBack(void)
+{
+ 	drive_forward(3000);
+	stop(500);
+	spinCW(cwTurn180Delay);
+	stop(500);
+	drive_forward(3000);
+	stop(500);
+	spinCCW(ccwTurn180Delay);
+	stop(500);   
+}
+
+
+void square(void)
+{
+    for(int i = 0; i < 4; i++)
+    {
+        drive_forward(3000);
+        stop(500);
+        spinCW(cwTurn90Delay);
+        stop(500);
+    }
 }

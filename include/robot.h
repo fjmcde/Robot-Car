@@ -21,6 +21,12 @@
 #define DPIN_LEFT_FORWARD    11
 #define DPIN_LEFT_BACKWARD   12
 
+/* Drive Speed */
+#define IDEAL_SPEED_LEFT    150
+#define IDEAL_SPEED_RIGHT   220
+#define FULL_SPEED_LEFT     255
+#define FULL_SPEED_RIGHT    255
+
 /* Drive Distance */
 
 //***********************************************************************************
@@ -28,19 +34,19 @@
 //***********************************************************************************
 typedef enum
 {
-    cwTurn90Delay = 725,
-    cwTurn180Delay = 1500,
+    cwTurn90Delay = 900,
+    cwTurn180Delay = 1600,
     cwTurn270Delay = 2200,
-    cwTurn360Delay = 2850
+    cwTurn360Delay = 3025
 }CW_spin_delay_Typedef;
 
 
 typedef enum
 {
-    ccwTurn90Delay = 825,
-    ccwTurn180Delay = 1625,
-    ccwTurn270Delay = 2450,
-    ccwTurn360Delay = 3250   
+    ccwTurn90Delay = 975,
+    ccwTurn180Delay = 2120,
+    ccwTurn270Delay = 2900,
+    ccwTurn360Delay = 3650   
 }CCW_spin_delay_Typedef;
 
 //***********************************************************************************
@@ -51,10 +57,16 @@ typedef enum
 //***********************************************************************************
 // function prototypes
 //***********************************************************************************
+/* Basic Driving Functions */
 void stop(uint32_t waitTime);
-void turnCCW(CCW_spin_delay_Typedef degrees);
-void turnCW(CW_spin_delay_Typedef degrees);
+void spinCCW(CCW_spin_delay_Typedef degrees);
+void spinCW(CW_spin_delay_Typedef degrees);
 void drive_backward(uint32_t driveTime);
 void drive_forward(uint32_t driveTime);
+
+/* Sample Driving Courses */
+void outAndBack(void);
+void square(void);
+
 
 #endif
