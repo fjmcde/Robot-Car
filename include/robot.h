@@ -29,13 +29,18 @@
 
 /* Drive Distance */
 
+
+/* 1602 LCD */
+#define LCD_ADDR            0x27
+#define LCD_COLS            16
+#define LCD_ROWS            2
 //***********************************************************************************
 // enums
 //***********************************************************************************
 typedef enum
 {
     cwTurn90Delay = 900,
-    cwTurn180Delay = 1600,
+    cwTurn180Delay = 1800,
     cwTurn270Delay = 2200,
     cwTurn360Delay = 3025
 }CW_spin_delay_Typedef;
@@ -44,7 +49,7 @@ typedef enum
 typedef enum
 {
     ccwTurn90Delay = 975,
-    ccwTurn180Delay = 2120,
+    ccwTurn180Delay = 2150,
     ccwTurn270Delay = 2900,
     ccwTurn360Delay = 3650   
 }CCW_spin_delay_Typedef;

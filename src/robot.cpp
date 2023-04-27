@@ -54,16 +54,21 @@ void spinCCW(CCW_spin_delay_Typedef degrees)
 
 /***************************************************************************//**
  * @brief
- *   
+ *   Spins the robot
  *
  * @details
- *   
+ *   Function to spin the robot clockwise using delays
+ * @param[in] delayTime
+ *   Enumerated spin delay in order top spin the robot 90, 180, 270, 
+ *   or 360 degrees. See CW_spin_delay_Typedef enumeration.
  ******************************************************************************/
 void spinCW(CW_spin_delay_Typedef delayTime)
 {
+    // set the PWM of the left and right side to full speed
     analogWrite(DPIN_RIGHT_PWM, FULL_SPEED_RIGHT);
 	analogWrite(DPIN_LEFT_PWM, FULL_SPEED_LEFT);
 
+    //
     digitalWrite(DPIN_LEFT_BACKWARD, LOW);
     digitalWrite(DPIN_LEFT_FORWARD, HIGH);
     digitalWrite(DPIN_RIGHT_BACKWARD, HIGH);

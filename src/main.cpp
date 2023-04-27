@@ -1,5 +1,9 @@
 #include <Arduino.h>
 #include "robot.h"
+#include "../lib/LiquidCrystal_I2C/LiquidCrystal_I2C.h"
+
+// static LCD class instantiation
+static LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
 
 void setup() {
 	// setup button
@@ -16,12 +20,24 @@ void setup() {
 	pinMode(DPIN_LEFT_FORWARD, OUTPUT);
 	pinMode(DPIN_RIGHT_BACKWARD, OUTPUT);
 	pinMode(DPIN_LEFT_BACKWARD, OUTPUT);
+
+	// initialize LCD
+	lcd.init();
+	lcd.backlight();
 }
 
 void loop() {
+	// print message to LCD
+	lcd.setCursor(3, 0);
+  	lcd.print("I'M ALIVE!"); 
+  	lcd.setCursor(0, 1);
+  	lcd.print("LETS GOOOOOOOOO!");
+
 	do{}while(digitalRead(DPIN_ON_OFF));
 	delay(1000);
 
-	square();
-	stop(500);
+
+
+	outAndBack();;
+	stop(500);	
 }
