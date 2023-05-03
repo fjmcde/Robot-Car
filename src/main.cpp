@@ -1,43 +1,58 @@
-#include <Arduino.h>
-#include "robot.h"
-#include "../lib/LiquidCrystal_I2C/LiquidCrystal_I2C.h"
+#include "main.h"
 
-// static LCD class instantiation
+/* Static variables */
 static LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_ROWS);
+static Adafruit_SHTC3 shtc3 = Adafruit_SHTC3();
+static sensors_event_t humidity;
+static sensors_event_t temp;
 
-void setup() {
-	// setup button
-	pinMode(DPIN_ON_OFF, INPUT_PULLUP);
-
-	// setup pwm
-	pinMode(DPIN_RIGHT_PWM, OUTPUT);
-	pinMode(DPIN_LEFT_PWM, OUTPUT);
-	analogWrite(DPIN_RIGHT_PWM, IDEAL_SPEED_RIGHT);
-	analogWrite(DPIN_LEFT_PWM, IDEAL_SPEED_LEFT);
-
-	//setup direction output
-	pinMode(DPIN_RIGHT_FORWARD, OUTPUT);
-	pinMode(DPIN_LEFT_FORWARD, OUTPUT);
-	pinMode(DPIN_RIGHT_BACKWARD, OUTPUT);
-	pinMode(DPIN_LEFT_BACKWARD, OUTPUT);
-
+void setup() 
+{
 	// initialize LCD
 	lcd.init();
 	lcd.backlight();
+
+	// set baud rate
+	Serial.begin(115200);
+
+	// print a test message
+	Serial.println("SHTC3 test");
+
+	// assert statement
+	if(!shtc3.begin()) 
+	{
+		// error message
+		Serial.println("Couldn't find SHTC3");
+		
+		// infinite loop
+		while(1)
+		{
+			delay(1);
+		}
+
+		// error resolution
+		Serial.println("Found SHTC3 sensor");
+	}
 }
 
-void loop() {
-	// print message to LCD
-	lcd.setCursor(3, 0);
-  	lcd.print("I'M ALIVE!"); 
-  	lcd.setCursor(0, 1);
-  	lcd.print("LETS GOOOOOOOOO!");
+void loop() 
+{
+	// get temperature and humidity events  
+	shtc3.getEvent(&humidity, &temp);
 
-	do{}while(digitalRead(DPIN_ON_OFF));
-	delay(1000);
+	// convert temperature from celcius to fahrenheit
+	float temp_f = (temp.temperature * 1.8) + 32;
 
+	// 500ms delay
+	delay(500);
 
-
-	outAndBack();;
-	stop(500);	
+	// print temperature and humidity
+	lcd.setCursor(0, 0);
+	lcd.print("Temp: "); 
+	lcd.print(temp_f);
+	lcd.print(" F");
+	lcd.setCursor(0, 1);
+	lcd.print("Hum: "); 
+	lcd.print(humidity.relative_humidity); 
+	lcd.print(" %rH");
 }
